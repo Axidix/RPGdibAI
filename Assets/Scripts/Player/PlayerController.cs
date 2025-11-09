@@ -102,7 +102,7 @@ public class PlayerController : MonoBehaviour
             return;
 
         // Optional debug
-        Debug.Log("Switching animation to: " + clipName);
+        //Debug.Log("Switching animation to: " + clipName);
 
         // Try to play/crossfade only once when it changes
         if (anim.HasState(0, Animator.StringToHash(clipName)))
