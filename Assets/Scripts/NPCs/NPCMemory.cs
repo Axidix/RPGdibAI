@@ -25,6 +25,8 @@ public class NPCMemory {
     public string npcId;
     [TextArea(1,2)]
     public string personaLine; // inspector editable
+    [TextArea(1,2)]
+    public string roleLine;   // e.g. "You own the merchant caravan and protect the goods."
     public int relationship;   // -5 .. +5
     public string roleState;   // idle|busy|guarding|grateful|suspicious etc.
     [TextArea(1,2)]
@@ -34,13 +36,15 @@ public class NPCMemory {
     public long lastInteractionTs;
     public List<MemoryFact> knownFacts = new List<MemoryFact>();
     public List<string> convoLog = new List<string>(); // debug-only, cap default 8
+    public int consecutiveInteractions = 0;
 
     // Default ctor required for JsonUtility
     public NPCMemory() { }
 
-    public NPCMemory(string id, string persona = "") {
+    public NPCMemory(string id, string persona = "", string role = "") {
         npcId = id ?? Guid.NewGuid().ToString();
         personaLine = persona ?? "";
+        roleLine = role ?? "";
         relationship = 0;
         roleState = "idle";
         goal = "";

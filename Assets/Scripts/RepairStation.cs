@@ -121,6 +121,11 @@ public class RepairStation : MonoBehaviour
         isRepairing = false;
         if (repairText != null) repairText.text = "Repaired!";
         if (progressBar != null) progressBar.gameObject.SetActive(false);
+        if (MemoryManager.I != null)
+        {
+            MemoryManager.I.ResetAllInteractionCounters();
+            Debug.Log("[RepairStation] Carriage repaired → reset all NPC interaction counters.");
+        }
 
         if (MemoryManager.I != null)
         {

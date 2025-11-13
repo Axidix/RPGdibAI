@@ -92,6 +92,11 @@ public class BanditEncounter : MonoBehaviour
                 DialogueManager.Instance.PlayDialogue(npc, npc.greetingDialogue);
                 EventHelpers.RecordAxlePinTaken(npc.npcId);
             }
+            if (MemoryManager.I != null)
+            {
+                MemoryManager.I.ResetAllInteractionCounters();
+                Debug.Log("[BanditEncounter] Bandit defeated → reset all NPC interaction counters.");
+            }
         }
         else
         {

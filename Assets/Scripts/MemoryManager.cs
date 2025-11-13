@@ -97,16 +97,26 @@ public class MemoryManager : MonoBehaviour {
     #endregion
 
     #region Accessors
-    public NPCMemory GetOrCreate(string npcId, string persona = "") {
+    public NPCMemory GetOrCreate(string npcId, string persona = "", string role = "")
+    {
         if (string.IsNullOrEmpty(npcId)) npcId = Guid.NewGuid().ToString();
-        if (memories.TryGetValue(npcId, out var mem)) {
-            // ensure persona is set if provided
-            if (!string.IsNullOrEmpty(persona) && string.IsNullOrEmpty(mem.personaLine)) mem.personaLine = persona;
+        if (memories.TryGetValue(npcId, out var mem))
+        {
+            if (!string.IsNullOrEmpty(persona) && string.IsNullOrEmpty(mem.personaLine))
+                mem.personaLine = persona;
+            if (!string.IsNullOrEmpty(role) && string.IsNullOrEmpty(mem.roleLine))
+                mem.roleLine = role;
             return mem;
         }
-        var nm = new NPCMemory(npcId, persona);
+        var nm = new NPCMemory(npcId, persona, role);
         memories[npcId] = nm;
         return nm;
+    }
+
+    public NPCMemory GetMemory(string npcId)
+    {
+        memories.TryGetValue(npcId, out var mem);
+        return mem;
     }
 
     public bool TryGet(string npcId, out NPCMemory mem) {
@@ -156,6 +166,16 @@ public class MemoryManager : MonoBehaviour {
         UpdateShortSummary(mem);
     }
 
+    public void ResetAllInteractionCounters()
+    {
+        foreach (var kvp in memories)
+        {
+            if (kvp.Value != null)
+                kvp.Value.consecutiveInteractions = 0;
+        }
+
+        Debug.Log("[MemoryManager] All NPC interaction counters reset.");
+    }
     public void SetRoleState(string npcId, string role) {
         var mem = GetOrCreate(npcId);
         mem.roleState = role ?? mem.roleState;
