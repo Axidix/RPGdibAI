@@ -141,15 +141,63 @@ public class RepairStation : MonoBehaviour
         }
 
         // small delay so player sees the text
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(1.1f);
         HidePrompt();
 
         // notify other systems
         Debug.Log("RepairStation: carriage repaired.");
 
-        if (onRepairSpeaker != null && repairSuccessDialogue != null && DialogueManager.Instance != null)
+        if (onRepairSpeaker != null && DialogueManager.Instance != null)
         {
-            DialogueManager.Instance.PlayDialogue(onRepairSpeaker, repairSuccessDialogue);
+            // Prefer AI-generated line if LLM is available
+            if (LLMClient.I != null && !string.IsNullOrEmpty(LLMClient.I.apiKey))
+            {
+                // Give clear context for the merchant
+                string npcId = onRepairSpeaker.npcId;
+                string playerAction = "The player has just repaired the broken carriage so the journey can continue.";
+
+                LLMClient.I.GenerateReply(npcId, playerAction, (reply, ok) =>
+                {
+                    string finalText;
+
+                    if (ok && !string.IsNullOrEmpty(reply))
+                    {
+                        Debug.Log($"{onRepairSpeaker.displayName} (merchant repair AI): {reply}");
+                        finalText = reply;
+                    }
+                    else
+                    {
+                        // Fallback: use predefined dialogue or a simple thank-you line
+                        if (repairSuccessDialogue != null && repairSuccessDialogue.lines != null && repairSuccessDialogue.lines.Length > 0)
+                            finalText = repairSuccessDialogue.lines[0].text;
+                        else
+                            finalText = "You actually fixed it… We might survive this after all.";
+                        
+                        Debug.Log($"{onRepairSpeaker.displayName} (merchant repair fallback): {finalText}");
+                    }
+
+                    // Wrap into a one-line Dialogue and play it
+                    DialogueLine line = new DialogueLine
+                    {
+                        speaker = onRepairSpeaker.displayName,
+                        text = finalText,
+                        duration = 4f
+                    };
+
+                    Dialogue aiDialogue = new Dialogue
+                    {
+                        lines = new DialogueLine[] { line }
+                    };
+
+                    DialogueManager.Instance.PlayDialogue(onRepairSpeaker, aiDialogue);
+                });
+            }
+            else
+            {
+                // No LLM -> keep original predefined dialogue
+                if (repairSuccessDialogue != null)
+                    DialogueManager.Instance.PlayDialogue(onRepairSpeaker, repairSuccessDialogue);
+            }
         }
     }
 }

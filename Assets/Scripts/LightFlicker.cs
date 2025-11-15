@@ -11,8 +11,9 @@ public class LightFlicker : MonoBehaviour
 
     void Update()
     {
-        light2D.intensity = Mathf.Lerp(light2D.intensity,
-            Random.Range(intensityMin, intensityMax),
-            flickerSpeed);
+        if (light2D == null) return;
+        float duration = Mathf.Max(0.0001f, flickerSpeed);
+        float t = Mathf.PingPong(Time.time, duration) / duration; // 0->1 in 'duration' seconds, then back
+        light2D.intensity = Mathf.Lerp(intensityMin, intensityMax, t);
     }
 }

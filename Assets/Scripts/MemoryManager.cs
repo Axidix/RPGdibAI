@@ -223,10 +223,9 @@ public class MemoryManager : MonoBehaviour {
     public string GetPromptSnippet(string npcId) {
         if (!memories.TryGetValue(npcId, out var mem)) return "";
         var sb = new StringBuilder();
-        sb.AppendLine($"NPC:{mem.npcId} | {Truncate(mem.personaLine, 80)}");
-        sb.AppendLine($"Relationship:{mem.relationship} Role:{Truncate(mem.roleState, 20)} Goal:{Truncate(mem.goal,60)}");
+        //sb.AppendLine($"Relationship:{mem.relationship} Role:{Truncate(mem.roleState, 20)} Goal:{Truncate(mem.goal,60)}");
         if (mem.knownFacts.Count > 0) sb.AppendLine($"TopFact: {Truncate(mem.knownFacts[0].value,120)}");
-        sb.AppendLine($"Summary:{Truncate(mem.shortSummary, maxSummaryLength)}");
+        //sb.AppendLine($"Summary:{Truncate(mem.shortSummary, maxSummaryLength)}");
         return sb.ToString();
     }
     #endregion
@@ -264,4 +263,13 @@ public class MemoryManager : MonoBehaviour {
         }
     }
     #endregion
+
+    public void SetPersonaLine(string npcId, string persona)
+    {
+        var mem = GetOrCreate(npcId);
+        if (!string.IsNullOrWhiteSpace(persona))
+            mem.personaLine = persona;
+
+        UpdateShortSummary(mem);
+    }
 }

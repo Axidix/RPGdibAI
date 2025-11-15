@@ -36,7 +36,7 @@ public class BanditEncounter : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return;
         playerInZone = false;
-        StopEncounter();
+        Invoke(nameof(StopEncounter), 2.0f);
     }
 
     void Update()
@@ -83,28 +83,56 @@ public class BanditEncounter : MonoBehaviour
             if (GameState.Instance != null) GameState.Instance.playerHasAxlePin = true;
 
             if (messageText != null) messageText.text = "You win! The bandit drops an axle pin.";
-            Debug.Log("BanditEncounter: success - axle pin acquired.");
-
-            // optional: play short victory dialogue
-            if (DialogueManager.Instance != null && npc != null)
-            {
-                // If you want a special victory dialogue, use a separate Dialogue on the NPC.
-                DialogueManager.Instance.PlayDialogue(npc, npc.greetingDialogue);
-                EventHelpers.RecordAxlePinTaken(npc.npcId);
-            }
+            //Debug.Log("BanditEncounter: success - axle pin acquired.");
             if (MemoryManager.I != null)
             {
                 MemoryManager.I.ResetAllInteractionCounters();
-                Debug.Log("[BanditEncounter] Bandit defeated → reset all NPC interaction counters.");
+                //Debug.Log("[BanditEncounter] Bandit defeated → reset all NPC interaction counters.");
+            }
+            
+            if (DialogueManager.Instance != null && npc != null)    // === AI-GENERATED DEFEAT LINE ===
+            {
+                // If we have an LLM and a key, ask it for a defeat line
+                if (LLMClient.I != null && !string.IsNullOrEmpty(LLMClient.I.apiKey))
+                {
+                    string playerAction = "You just lost a combat against the player, who takes the axle pin.";
+                    LLMClient.I.GenerateReply(npc.npcId, playerAction, (reply, ok) =>
+                    {
+                        string finalText;
+                        if (ok && !string.IsNullOrEmpty(reply))
+                        {
+                            //Debug.Log($"{npc.displayName} (bandit defeat AI): {reply}");
+                            finalText = reply;
+                        }
+                        else
+                        {
+                            finalText = "Tch... you got lucky this time!";
+                            //Debug.Log($"{npc.displayName} (bandit defeat fallback): {finalText}");
+                        }
+                        DialogueLine line = new DialogueLine
+                        {
+                            speaker = npc.displayName,
+                            text = finalText,
+                            duration = 3f
+                        };
+                        Dialogue aiDialogue = new Dialogue{lines = new DialogueLine[] { line }};
+                        DialogueManager.Instance.PlayDialogue(npc, aiDialogue);
+                    });
+                }
+                else
+                {
+                    // No LLM → keep old predefined dialogue
+                    DialogueManager.Instance.PlayDialogue(npc, npc.greetingDialogue);
+                }
             }
         }
         else
         {
             if (messageText != null) messageText.text = "Attack failed — the bandit escapes!";
-            Debug.Log("BanditEncounter: attack failed.");
+            //Debug.Log("BanditEncounter: attack failed.");
         }
 
         // auto-close after a short delay so player sees the message
-        Invoke(nameof(StopEncounter), 1.4f);
+        Invoke(nameof(StopEncounter), 4.0f);
     }
 }

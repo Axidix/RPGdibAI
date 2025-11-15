@@ -160,7 +160,7 @@ public class LLMClient : MonoBehaviour {
             sb.AppendLine($"The player has spoken to you {timesTalked} time(s) in a row.");
             string mood = timesTalked switch
             {
-                2 => "slightly puzzled you've come back so quickly.",
+                2 => "slightly puzzled the player already came back.",
                 3 => "a bit impatient from repeated questions.",
                 4 => "visibly annoyed by the repeated interruptions.",
                 _ => "very irritated after being spoken to so many times in a row."
@@ -169,11 +169,14 @@ public class LLMClient : MonoBehaviour {
             sb.AppendLine($"Your tone should reflect that you are {mood} But you still respond based on the current situation and world events.");
         }
 
-        // ===== OUTPUT STYLE =====
         sb.AppendLine(
-            "Respond in 1–2 short sentences."
+            "Your answer MUST strongly reflect your personality, your role, and the exact current world situation, even if it feels exaggerated or caricatural."
+        );
+        sb.AppendLine(
+            "Respond in 1–2 short sentences. No narration, no quotation marks—just what the NPC says."
         );
 
+        Debug.Log($"LLMClient: built prompt:\n{sb.ToString()}");
         return sb.ToString();
     }
 

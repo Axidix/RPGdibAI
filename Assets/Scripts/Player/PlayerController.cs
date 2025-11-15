@@ -29,6 +29,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+
+        // Block all input until persona setup is done
+        if (!PersonaSetup.ControlsEnabled)
+        {
+            return;
+        }
+        
         // --- Get directional input ---
         moveInput = Vector2.zero;
         if (Keyboard.current.wKey.isPressed) moveInput.y += 1f;
