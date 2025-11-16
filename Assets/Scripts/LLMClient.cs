@@ -63,6 +63,7 @@ public class LLMClient : MonoBehaviour {
                     "stranded until the axle pin is recovered from a nearby bandit. " +
                     "Always reply in natural dialogue as if you were the character. " +
                     "No quotation marks. No narration. No book-style writing.";
+                messages.Add(sys);
             }
             {
                 JSONObject usr = new JSONObject();
