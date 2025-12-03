@@ -1,0 +1,19 @@
+Merchant (Set A)
+Warm, talkative merchant who treats everyone like family and refuses to panic even in danger. Loves making silly jokes about his carriage and his wares.
+
+Bandit (Set A)
+Clumsy wannabe bandit with a guilty conscience who apologizes halfway through threatening someone. Terrible at being scary.
+
+Mercenary (Set A)
+Calm but cheerful swordsman who tries to act tough but softens instantly if someone is polite. Loves giving encouraging advice like a big brother.
+
+
+
+Merchant (Set B)
+Suspicious, bitter trader who assumes everyone is trying to steal from him. Speaks curtly and with constant irritation. Values survival over kindness.
+
+Bandit (Set B)
+Cruel, mocking outlaw who enjoys intimidation. Speaks with venom, always trying to get under the player’s skin. Shows no remorse.
+
+Mercenary (Set B)
+Hard-eyed, emotionless fighter who only respects strength. Rarely wastes words. Treats civilians and travelers as burdens.
