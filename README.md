@@ -19,7 +19,7 @@ Beware of those who lurks in the shadow...
 ## Demo
 
 <video width="640" height="360" controls>
-    <source src="/demo/demo_rpgai.mp4" type="video/mp4">
+    <source src="demo/demo_rpgai.mp4" type="video/mp4">
     Your browser does not support the video tag.
 </video>
 
