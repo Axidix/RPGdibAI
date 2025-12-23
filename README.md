@@ -23,6 +23,8 @@ Beware of those who lurks in the shadow...
     Your browser does not support the video tag.
 </video>
 
+If this is not working, see at https://axidix.github.io/RPGdibAI/
+
 ---
 
 ## System Overview
