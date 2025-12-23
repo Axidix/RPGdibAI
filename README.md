@@ -18,10 +18,9 @@ Beware of those who lurks in the shadow...
 
 ## Demo
 
-<video width="640" height="360" controls>
-    <source src="demo/demo_rpgai.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-</video>
+<video width="640" height
+
+https://github.com/user-attachments/assets/32a1a5d0-7c80-4b64-8e25-06338d90514a
 
 If this is not working, see at https://axidix.github.io/RPGdibAI/
 
